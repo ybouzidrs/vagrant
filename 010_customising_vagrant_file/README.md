@@ -3,7 +3,9 @@
 ## Customising a Vagrantfile
 
 1. Box Settings
-    > config.vm.box = "ubuntu/focal64"
+    ```
+    config.vm.box = "ubuntu/focal64"
+    ```
 2. Provider Settings
     ```
     config.vm.provider "virtualbox" do |vb|
