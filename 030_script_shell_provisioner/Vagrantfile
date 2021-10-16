@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  
+  # Box Settings
+  config.vm.box = "ubuntu/focal64"
+
+  # Provider Settings
+  config.vm.provider "virtualbox" do |vb|
+    # vb.gui = true
+    vb.name = "serguy.box"
+    # vb.memory = 512
+    # vb.cpus = 1
+  end
+
+  # Network Settings
+  config.vm.network "private_network", ip: "172.17.2.10"
+
+  # Provisioner Settings
+  config.vm.provision "shell", path: "bootstrap.sh"
+
+end
