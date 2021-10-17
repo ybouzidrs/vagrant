@@ -1,0 +1,34 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  
+  # Box Settings
+  config.vm.box = "ubuntu/focal64"
+
+  # Provider Settings
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "serguy.box"
+    # vb.memory = 2048
+    # vb.cpus = 4
+  end
+
+  # Network Settings
+  # config.vm.network "forwarded_port", guest: 80, host: 8888
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+  config.vm.network "private_network", ip: "172.17.2.10"
+
+  # Folder Settings
+  # config.vm.synced_folder "./html/", "/var/www/html/", :nfs => { :mount_options => ["dmode=777", "fmode=666"] }
+  # config.vm.synced_folder "./html/", "/var/www/html/", :nfs => true
+  config.vm.synced_folder "./html", "/var/www/html"
+  
+  # Provisioner Settings
+  config.vm.provision "copy_sql_data", type: "file", source: "./sql_script.sql", destination: "~/sql_script.sql"
+  config.vm.provision "bootstrap", type: "shell", path: "bootstrap.sh"
+  config.vm.provision "inline", type: "shell", inline: <<-SHELL
+  mysql -hlocalhost -uroot -proot < sql_script.sql
+  mysql -hlocalhost -uroot -proot test -e"select * from posts;"
+  SHELL
+
+end
